@@ -16,8 +16,8 @@ import java.sql.Statement;
 
 public class DbConnector {
      private static final String JDBC_URL = "jdbc:postgresql://localhost:5432/";
-    private static final String JDBC_USER = "postgres";
-    private static final String JDBC_PASSWORD = "pwd";
+    private static final String JDBC_USER = "postgres"; //username
+    private static final String JDBC_PASSWORD = "root"; // the password of the Postgres
     private static final String DEFAULT_DB = "postgres"; // Default database to connect to
     private static final String NEW_DATABASE_NAME = "logbook"; // New database name
     private static final String NEW_DATABASE_URL = JDBC_URL + NEW_DATABASE_NAME;
@@ -30,7 +30,7 @@ public class DbConnector {
         }
     }
     
-    private void createDatabaseIfNotExists() throws SQLException {
+    public void createDatabaseIfNotExists() throws SQLException {
         try (Connection connection = DriverManager.getConnection(JDBC_URL + DEFAULT_DB, JDBC_USER, JDBC_PASSWORD);
              Statement statement = connection.createStatement()) {
             String createDatabaseSQL = "CREATE DATABASE " + NEW_DATABASE_NAME;
