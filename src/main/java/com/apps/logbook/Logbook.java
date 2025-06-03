@@ -3,7 +3,7 @@
  */
 
 package com.apps.logbook;
-
+import com.apps.logbook.forms.LoginForm;
 /**
  *
  * @author lenovo
@@ -11,6 +11,8 @@ package com.apps.logbook;
 public class Logbook {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        
+        LoginForm loginForm = new LoginForm();
+        loginForm.setVisible(true);
     }
 }
