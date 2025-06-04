@@ -4,8 +4,10 @@
  */
 package com.apps.logbook.forms;
 
+
 import com.apps.logbook.controllers.AccountController;
 import com.apps.logbook.entities.UserEntity;
+import com.apps.logbook.utilities.UserUtilities;
 import javax.swing.JOptionPane;
 
 /**
@@ -13,7 +15,6 @@ import javax.swing.JOptionPane;
  * @author lenovo
  */
 public class RegisterForm extends javax.swing.JFrame {
-    
     //initialize variables for global use
     String fname;
     String mname;
@@ -29,7 +30,6 @@ public class RegisterForm extends javax.swing.JFrame {
      */
     public RegisterForm() {
         initComponents();
-        setLocationRelativeTo(null);
     }
 
     /**
@@ -182,12 +182,18 @@ public class RegisterForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Some fields are empty!");
         }else{
             try{
-                accountController.registerUser(user);
-                JOptionPane.showMessageDialog(this, "Successfully Inserted");
-                loginForm.setVisible(true);
-                this.setVisible(false);
+                boolean isUserInserted = accountController.registerUser(user);
+                if(isUserInserted){
+                    JOptionPane.showMessageDialog(this, "User created!");
+                    loginForm.setVisible(true);
+                    this.setVisible(false);
+                }else{
+                    JOptionPane.showMessageDialog(this, "User exists");
+                }
+                
             }catch(Exception e){
-            JOptionPane.showMessageDialog(this, "Please Try again");
+            JOptionPane.showMessageDialog(this, "Error Creating User");
+            System.out.println(e);
         }
         }
     }//GEN-LAST:event_btnSubmitActionPerformed
