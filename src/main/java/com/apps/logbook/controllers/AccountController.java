@@ -8,6 +8,7 @@ import com.apps.logbook.entities.UserEntity;
 import com.apps.logbook.utilities.UserUtilities;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -22,21 +23,21 @@ public class AccountController {
         this.dbConnector = new DbConnector(); 
     }
         
-public boolean registerUser(UserEntity user) throws SQLException {
+public boolean registerUser(UserEntity usr) throws SQLException {
     String insertQuery = "INSERT INTO users (fname, mname, lname, email, password) VALUES (?, ?, ?, ?, ?)";
-    String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+    String hashedPassword = BCrypt.hashpw(usr.getPassword(), BCrypt.gensalt());
 
     try (Connection conn = dbConnector.getConnection()) {
         // Check email using the utility method
-        if (UserUtilities.emailExists(conn, user.getEmail())) {
+        if (UserUtilities.emailExists(conn, usr.getEmail())) {
             return false;  // Email already exists
         }
 
         try (PreparedStatement insertStmt = conn.prepareStatement(insertQuery)) {
-            insertStmt.setString(1, user.getFname());
-            insertStmt.setString(2, user.getMname());
-            insertStmt.setString(3, user.getLname());
-            insertStmt.setString(4, user.getEmail());
+            insertStmt.setString(1, usr.getFname());
+            insertStmt.setString(2, usr.getMname());
+            insertStmt.setString(3, usr.getLname());
+            insertStmt.setString(4, usr.getEmail());
             insertStmt.setString(5, hashedPassword);
             insertStmt.executeUpdate();
             return true;
@@ -45,9 +46,23 @@ public boolean registerUser(UserEntity user) throws SQLException {
         throw e;
     }
 }
-    public boolean login(String username, String password){
-        //maglalagay dito ng logic para icall ang db, hanapin kung may existing na username at password
-        return true;
-    }
-    
+    public boolean login(UserEntity user) throws SQLException{
+        String loginQuery = "SELECT password FROM users WHERE email = ?";
+        
+        try(Connection conn = dbConnector.getConnection(); ){
+           try(PreparedStatement loginStatement = conn.prepareStatement(loginQuery)){
+               loginStatement.setString(1, user.getEmail());
+               try(ResultSet rs = loginStatement.executeQuery()){
+                   if(rs.next()){
+                       String storedHashedPassword = rs.getString("password");
+                       return BCrypt.checkpw(user.getPassword(), storedHashedPassword); // Password matches
+                   }
+                   return false; // return false if the email is not found
+               }
+           }
+        }
+        catch(SQLException e){
+            throw e;
+        }
+    }    
 }

@@ -4,11 +4,20 @@
  */
 package com.apps.logbook.forms;
 
+import com.apps.logbook.controllers.AccountController;
+import com.apps.logbook.entities.UserEntity;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author lenovo
  */
 public class LoginForm extends javax.swing.JFrame {
+    String email;
+    String password;
+    
+    AccountController accountController = new AccountController();
+    MainForm mainForm = new MainForm();
 
     /**
      * Creates new form LoginForm
@@ -131,6 +140,30 @@ public class LoginForm extends javax.swing.JFrame {
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
         // TODO add your handling code here:
+        email = txtEmail.getText();
+        password = new String(txtPassword.getPassword());
+        
+        UserEntity user = new UserEntity(email, password);
+        
+        if(email.isEmpty() || password.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Email or Password is Empty"); 
+        }
+        else{
+            try {
+               boolean loginSuccess = accountController.login(user);
+                if(loginSuccess){
+                    JOptionPane.showMessageDialog(this, "Credentials are correct!");
+                    mainForm.setVisible(true);
+                    this.setVisible(false);
+                }else{
+                    JOptionPane.showMessageDialog(this, "Login Failed");
+                }
+            }
+            catch(Exception e){
+                System.out.println();
+            }
+        }
+
         
     }//GEN-LAST:event_btnSubmitActionPerformed
 
