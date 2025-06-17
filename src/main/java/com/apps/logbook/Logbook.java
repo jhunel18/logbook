@@ -12,6 +12,7 @@ import java.sql.SQLException;
  * @author lenovo
  */
 public class Logbook {
+    
 
     public static void main(String[] args) throws SQLException {
         //Initializer the dbConnector and the database for logbook

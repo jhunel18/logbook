@@ -36,6 +36,4 @@ public class DataInitializer {
             throw e;  // Rethrow exception to ensure calling code is aware of the failure
         }
     }
-    
-    
 }

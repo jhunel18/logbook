@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DbConnector {
-     private static final String JDBC_URL = "jdbc:postgresql://localhost:5432/";
+    private static final String JDBC_URL = "jdbc:postgresql://localhost:5432/";
     private static final String JDBC_USER = "postgres"; //username
     private static final String JDBC_PASSWORD = "root"; // the password of the Postgres
     private static final String DEFAULT_DB = "postgres"; // Default database to connect to
